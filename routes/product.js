@@ -62,4 +62,49 @@ router.post('/',(req,res,next)=>{
     });
 });
 
+router.put('/:productId',(req,res,next)=>{
+    Product.findByIdAndUpdate(req.params.productId, {
+        $set: req.body
+    },{
+        new: true
+    },(err,prod)=>{
+        if(err != null){
+            res.statusCode = 500;
+            res.setHeader('Content-type','application/json');
+            res.json({
+                status: 'error',
+                'error': err
+            });
+        }else{
+            console.log(prod);
+            res.statusCode = 200;
+            res.setHeader('Content-type','application/json');
+            res.json({
+                status: 'success',
+                'result': prod
+            });
+        }
+    });
+});
+router.delete('/:productId',(req,res,next)=>{
+    Product.findByIdAndRemove(req.params.productId,(err,response)=>{
+        if(err != null){
+            res.statusCode = 500;
+            res.setHeader('Content-type','application/json');
+            res.json({
+                status: 'error',
+                'error': err
+            });
+        }else{
+            console.log(response);
+            res.statusCode = 200;
+            res.setHeader('Content-type','application/json');
+            res.json({
+                status: 'success',
+                'result': response
+            });
+        }
+    });
+});
+
 module.exports = router;
